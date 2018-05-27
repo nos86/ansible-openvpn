@@ -13,6 +13,7 @@ openvpn_push_domains: []
 openvpn_push_routes: []
 
 openvpn_cipher: "BF-CBC"
+openvpn_auth: "SHA256"
 openvpn_max_clients: 100
 openvpn_push_redirect_gateway: False
 
