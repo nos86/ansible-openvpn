@@ -28,10 +28,6 @@ openvpn_ifconfig: "10.8.8.1 255.255.252.0"
 openvpn_push_route_gateway: "10.8.8.1"
 openvpn_ifconfig_pool: "10.8.8.2 10.8.8.199 255.255.255.0"
 
-# DN settings
-openvpn_domainComponent_tld: "com"
-openvpn_domainComponent_domain: "example"
-openvpn_organizationName: "Example Company Inc"
 
 openvpn_users: []
 openvpn_revocation_list: []
