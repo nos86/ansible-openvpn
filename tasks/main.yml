@@ -19,7 +19,7 @@
 
 
 - name: installing packages with apt
-  include: install.apt.yml
+  import_tasks: install.apt.yml
   when: ansible_os_family == 'Debian'
 
 
@@ -52,7 +52,7 @@
 
 
 - name: copy x509 stuff to slave
-  include: 'copy-x509.yml'
+  import_tasks: 'copy-x509.yml'
   when: openvpn_is_pki_master == False
 
 
