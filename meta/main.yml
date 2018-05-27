@@ -1,7 +1,7 @@
 ---
 galaxy_info:
-  author: 'Reto Gassmann'
-  description: 'OpenVPN with PKI for Ubuntu/Debian'
+  author: 'Salvatore Musumeci'
+  description: 'OpenVPN using exisisting certificates for Ubuntu/Debian'
   license: BSD
   min_ansible_version: '1.8'
 
