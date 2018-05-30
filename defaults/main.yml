@@ -49,7 +49,7 @@ openvpn_ca_cert: "{{ openvpn_keydir }}/ca.crt"
 openvpn_server_cert: "{{ openvpn_keydir }}/server.crt"
 openvpn_server_key: "{{ openvpn_keydir }}/server.key"
 openvpn_tls_auth_key: "{{ openvpn_keydir }}/ta.key"
-openvpn_ca_crl_list: "{{ openvpn_configdir }}/server.crl"
+openvpn_ca_crl_list: "{{ openvpn_client_certificates_dir }}/server.crl"
 
 # Iptable specific configuration
 openvpn_configure_iptables: False
