@@ -36,6 +36,14 @@
     - "{{ openvpn_clientconfig_dir }}"
     - "{{ openvpn_client_certificates_dir }}"
 
+- name: copy diffie hellman params
+  copy:
+    src: "{{ openvpn_local_conf }}/dh{{ openvpn_key_size }}.pem"
+    dest: "{{ openvpn_keydir }}/dh{{ openvpn_key_size }}.pem"
+    owner: "{{ openvpn_user }}"
+    group: "{{openvpn_group}}"
+    mode: 644 
+
 - name: copy CA.crt
   copy:
       src: "{{openvpn_local_conf}}/ca.crt"
@@ -51,14 +59,6 @@
       owner: "{{openvpn_user}}"
       group: "{{openvpn_group}}" 
       mode: 644 
-
-- name: copy diffie hellman params
-  copy:
-    src: "{{ openvpn_local_conf }}/dh{{ openvpn_key_size }}.pem"
-    dest: "{{ openvpn_keydir }}/dh{{ openvpn_key_size }}.pem"
-    owner: "{{ openvpn_user }}"
-    group: "{{openvpn_group}}"
-    mode: 644 
 
 - name: copy tls-auth key
   copy:
@@ -78,10 +78,13 @@
       mode: 600 
   when: openvpn_is_pki_master
 
-
-- name: copy x509 stuff to slave
-  import_tasks: 'copy-x509.yml'
-  when: openvpn_is_pki_master == False
+- name: copy client certificates
+  copy:
+      src: "{{openvpn_local_conf}}/clients"
+      dest: "{{ openvpn_configdir }}"
+      owner: "{{openvpn_user}}"
+      group: "{{openvpn_group}}" 
+      mode: 640 
 
 
 - name: create openvpn server config
@@ -99,8 +102,8 @@
     enabled: yes
 
 
-# - include: client.configs.yml
-#   when: openvpn_is_pki_master
+- import_tasks: client.configs.yml
+
 
 
 # - name: create clientconfig (ccd)
@@ -109,21 +112,3 @@
 #     dest: "{{openvpn_clientconfig_dir}}/{{ item.fullname }} <{{ item.email }}>"
 #   with_items: "{{  openvpn_users  }}"
 #   when: item.ip_addr is defined
-
-
-# - name: fetch x509 items
-#   fetch: 
-#     src: "{{ item }}"
-#     dest: "{{ openvpn_local_storage_path }}/x509/{{ item.split('/').pop()  }}"
-#     flat: yes
-#   with_items: 
-#   - "{{ openvpn_ca_cert }}"
-#   - "{{ openvpn_server_cert }}"
-#   - "{{ openvpn_server_key }}"
-#   - "{{ openvpn_ca_crl_list }}"
-#   - "{{ openvpn_tls_auth_key }}"
-#   when: openvpn_fetch_x509
-
-- name: Configure iptables
-  iptables: table="nat" chain="POSTROUTING" source="{{ openvpn_fw_addr }}" out_interface="{{ ansible_default_ipv4.interface }}" jump="MASQUERADE"
-  when: openvpn_configure_iptables
