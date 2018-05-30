@@ -16,10 +16,10 @@
 
 - name: register client certs
   shell: echo \<cert\> && 
-         cat {{ simplepki_certs_dir }}/{{ item.username }}{{ simplepki_file_ext_crt }} && 
+         cat {{ openvpn_client_certificates_dir }}/{{ item }}.crt && 
          echo \</cert\> && 
          echo \<key\> && 
-         cat {{ simplepki_certs_dir }}/{{ item.username }}{{ simplepki_file_ext_key }} && 
+         cat {{ openvpn_client_certificates_dir }}/{{ item }}.key && 
          echo \</key\>
   register: vpn_client_certs
   changed_when: false
@@ -29,7 +29,7 @@
 - name: generate client config
   template: 
     src: "client.ovpn.j2" 
-    dest: "{{ openvpn_client_certificates_dir }}/{{ item.item.username }}-{{ openvpn_fqdn }}.ovpn" 
+    dest: "{{ openvpn_clientconfig_dir }}/{{ item.item }}.ovpn" 
     owner: root 
     group: root
     mode: 0400
@@ -38,8 +38,8 @@
 
 - name: fetch client config
   fetch: 
-    src: "{{ openvpn_client_certificates_dir }}/{{ item.username }}-{{ openvpn_fqdn }}.ovpn"
-    dest: "{{ openvpn_local_storage_path }}/{{ item.username }}-{{ openvpn_fqdn }}/{{ item.username }}-{{ openvpn_fqdn }}.ovpn"
+    src: "{{ openvpn_client_certificates_dir }}/{{ item }}.ovpn"
+    dest: "{{ openvpn_local_storage_path }}/{{ item }}/{{ item }}.ovpn"
     flat: yes
   with_items: "{{ openvpn_users }}"
   
